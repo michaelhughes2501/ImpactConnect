@@ -67,7 +67,7 @@ export default function Discover() {
           <h2 className="font-semibold text-dark">Free World Connections</h2>
           <button className="flex items-center space-x-2 text-primary text-sm font-medium">
             <i className="fas fa-sliders-h"></i>
-            <span>Filter Yard</span>
+            <span>Set My Game</span>
           </button>
         </div>
 
@@ -81,7 +81,7 @@ export default function Discover() {
             />
 
             <div className="bg-gray-50 rounded-lg p-4 mt-6">
-              <h3 className="font-medium text-dark mb-3">Today's Count</h3>
+              <h3 className="font-medium text-dark mb-3">Today's Numbers</h3>
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <div className="text-lg font-semibold text-primary">12</div>
@@ -102,7 +102,7 @@ export default function Discover() {
           <div className="text-center py-12">
             <i className="fas fa-heart text-gray-300 text-4xl mb-4"></i>
             <h3 className="font-medium text-gray-600 mb-2">Yard's Empty Right Now</h3>
-            <p className="text-gray-500 text-sm">More connections coming in soon. Stay solid!</p>
+            <p className="text-gray-500 text-sm">Check back later, homie. More people getting out every day!</p>
           </div>
         )}
       </section>

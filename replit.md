@@ -27,6 +27,22 @@ The app uses authentic prison slang and terminology to create a familiar environ
 - **Stay protected out here** - Safety messaging
 - **Keep your business to yourself** - Privacy advice
 - **Background checked** - Verified profiles
+- **Cleared** - Profile verification status
+- **Touched down** - Recently released from prison
+- **Did my bid/bit** - Served prison sentence
+- **Been home** - Time since release
+- **Free world** - Life outside prison
+- **The mix** - Drama/trouble
+- **Keep it 100** - Being honest/real
+- **Down chick/homie** - Loyal partner/friend
+- **Real one** - Authentic person
+- **Solid vibes only** - No drama/games
+- **Got my hustle legal** - Legitimate income now
+- **Program tight** - Life organized and stable
+- **Behind those walls** - In prison
+- **Came home changed** - Reformed after release
+- **Stay out the mix** - Avoid trouble
+- **Knows the code** - Understands prison culture
 
 ## System Architecture
 

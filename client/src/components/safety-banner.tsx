@@ -6,10 +6,10 @@ export default function SafetyBanner() {
         <div>
           <h3 className="font-medium text-dark text-sm">Stay Protected Out Here</h3>
           <p className="text-gray-600 text-xs mt-1">
-            Everyone's background checked. Flag anything that feels off right away.
+            Everyone's background checked. Keep your business to yourself and stay alert.
           </p>
           <button className="text-primary text-xs font-medium mt-1 hover:underline">
-            Safety Rules →
+            House Rules →
           </button>
         </div>
       </div>

@@ -18,7 +18,7 @@ export default function ProfileCard({ user, onLike, onSuperLike, onPass }: Profi
           >
             <div className="absolute top-3 right-3 bg-success text-white text-xs px-2 py-1 rounded-full flex items-center">
               <i className="fas fa-check-circle mr-1"></i>
-              Verified
+              Cleared
             </div>
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
               <h3 className="text-white font-semibold text-lg">

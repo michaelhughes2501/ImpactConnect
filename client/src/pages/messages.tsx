@@ -37,7 +37,7 @@ export default function Messages() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-dark">Kites</h2>
         <button className="text-primary text-sm font-medium">
-          Clear all
+          Mark read
         </button>
       </div>
 

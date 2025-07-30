@@ -38,13 +38,13 @@ export default function Matches() {
     <section className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-dark">Your Connects</h2>
-        <span className="text-sm text-gray-500">{matches.length} solid</span>
+        <span className="text-sm text-gray-500">{matches.length} solid connections</span>
       </div>
 
       {matches.length > 0 ? (
         <>
           <div className="mb-6">
-            <h3 className="font-medium text-dark mb-3 text-sm">Fresh Connects</h3>
+            <h3 className="font-medium text-dark mb-3 text-sm">New Homies</h3>
             <div className="grid grid-cols-4 gap-3">
               {recentMatches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
@@ -65,7 +65,7 @@ export default function Matches() {
           </div>
 
           <div>
-            <h3 className="font-medium text-dark mb-3 text-sm">All Your People</h3>
+            <h3 className="font-medium text-dark mb-3 text-sm">Your Crew</h3>
             <div className="space-y-3">
               {matches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
