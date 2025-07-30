@@ -5,7 +5,7 @@ export default function Header() {
         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
           <i className="fas fa-heart text-white text-sm"></i>
         </div>
-        <h1 className="text-lg font-semibold text-dark">SecondChance</h1>
+        <h1 className="text-lg font-semibold text-dark">FreeWorld Connect</h1>
       </div>
       <div className="flex items-center space-x-4">
         <button className="relative">

@@ -110,8 +110,8 @@ export default function Chat() {
         {messages.length === 0 ? (
           <div className="text-center py-12">
             <i className="fas fa-heart text-primary text-4xl mb-4"></i>
-            <h3 className="font-medium text-gray-600 mb-2">You matched!</h3>
-            <p className="text-gray-500 text-sm">Send a message to start the conversation</p>
+            <h3 className="font-medium text-gray-600 mb-2">You connected!</h3>
+            <p className="text-gray-500 text-sm">Send a kite to start talking</p>
           </div>
         ) : (
           messages.map((message) => (
@@ -148,7 +148,7 @@ export default function Chat() {
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
+            placeholder="Write your kite..."
             className="flex-1"
           />
           <Button 

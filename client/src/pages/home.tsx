@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Header from "@/components/header";
-import BottomNavigation from "@/components/bottom-navigation";
+import Header from "../components/header";
+import BottomNavigation from "../components/bottom-navigation";
 import Discover from "./discover";
 import Matches from "./matches";
 import Messages from "./messages";
@@ -32,10 +32,10 @@ export default function Home() {
       <nav className="bg-white border-b border-gray-200 px-4">
         <div className="flex space-x-6">
           {[
-            { id: "discover" as Tab, icon: "search", label: "Discover" },
-            { id: "matches" as Tab, icon: "heart", label: "Matches" },
-            { id: "messages" as Tab, icon: "comment", label: "Messages" },
-            { id: "profile" as Tab, icon: "user", label: "Profile" },
+            { id: "discover" as Tab, icon: "search", label: "Yard" },
+            { id: "matches" as Tab, icon: "heart", label: "Connects" },
+            { id: "messages" as Tab, icon: "comment", label: "Kites" },
+            { id: "profile" as Tab, icon: "user", label: "My Info" },
           ].map((tab) => (
             <button
               key={tab.id}

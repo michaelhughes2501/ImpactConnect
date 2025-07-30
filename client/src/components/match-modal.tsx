@@ -12,8 +12,8 @@ export default function MatchModal({ match, onClose }: MatchModalProps) {
       <div className="bg-white rounded-xl p-6 mx-4 max-w-sm w-full text-center">
         <div className="mb-4">
           <i className="fas fa-heart text-primary text-4xl mb-3"></i>
-          <h3 className="font-semibold text-dark text-lg mb-2">It's a Match!</h3>
-          <p className="text-gray-600 text-sm">You both liked each other</p>
+          <h3 className="font-semibold text-dark text-lg mb-2">You Connected!</h3>
+          <p className="text-gray-600 text-sm">You both showed interest - that's solid</p>
         </div>
         
         <div className="flex justify-center space-x-4 mb-6">
@@ -27,14 +27,14 @@ export default function MatchModal({ match, onClose }: MatchModalProps) {
               onClick={onClose}
               className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
             >
-              Send Message
+              Send a Kite
             </button>
           </Link>
           <button 
             onClick={onClose}
             className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
           >
-            Keep Swiping
+            Keep Looking
           </button>
         </div>
       </div>

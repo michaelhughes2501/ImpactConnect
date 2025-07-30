@@ -5,10 +5,10 @@ interface BottomNavigationProps {
 
 export default function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
   const tabs = [
-    { id: "discover" as const, icon: "search", label: "Discover" },
-    { id: "matches" as const, icon: "heart", label: "Matches" },
-    { id: "messages" as const, icon: "comment", label: "Messages" },
-    { id: "profile" as const, icon: "user", label: "Profile" },
+    { id: "discover" as const, icon: "search", label: "Yard" },
+    { id: "matches" as const, icon: "heart", label: "Connects" },
+    { id: "messages" as const, icon: "comment", label: "Kites" },
+    { id: "profile" as const, icon: "user", label: "My Info" },
   ];
 
   return (

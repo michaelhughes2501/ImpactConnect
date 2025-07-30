@@ -35,9 +35,9 @@ export default function Messages() {
   return (
     <section className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-dark">Messages</h2>
+        <h2 className="font-semibold text-dark">Kites</h2>
         <button className="text-primary text-sm font-medium">
-          Mark all read
+          Clear all
         </button>
       </div>
 
@@ -78,8 +78,8 @@ export default function Messages() {
       ) : (
         <div className="text-center py-12">
           <i className="fas fa-comment text-gray-300 text-4xl mb-4"></i>
-          <h3 className="font-medium text-gray-600 mb-2">No messages yet</h3>
-          <p className="text-gray-500 text-sm">Start a conversation with your matches!</p>
+          <h3 className="font-medium text-gray-600 mb-2">No kites yet</h3>
+          <p className="text-gray-500 text-sm">Start talking with your connects!</p>
         </div>
       )}
 
@@ -87,9 +87,9 @@ export default function Messages() {
         <div className="flex items-start space-x-2">
           <i className="fas fa-exclamation-triangle text-warning text-sm mt-0.5"></i>
           <div>
-            <h4 className="font-medium text-yellow-800 text-sm">Safety Reminder</h4>
+            <h4 className="font-medium text-yellow-800 text-sm">Stay Safe Out Here</h4>
             <p className="text-yellow-700 text-xs mt-1">
-              Never share personal information like your address or financial details. Meet in public places.
+              Keep your business to yourself until you know someone's solid. Always meet in public spots first time.
             </p>
           </div>
         </div>

@@ -37,14 +37,14 @@ export default function Matches() {
   return (
     <section className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-dark">Your Matches</h2>
-        <span className="text-sm text-gray-500">{matches.length} matches</span>
+        <h2 className="font-semibold text-dark">Your Connects</h2>
+        <span className="text-sm text-gray-500">{matches.length} solid</span>
       </div>
 
       {matches.length > 0 ? (
         <>
           <div className="mb-6">
-            <h3 className="font-medium text-dark mb-3 text-sm">Recent Matches</h3>
+            <h3 className="font-medium text-dark mb-3 text-sm">Fresh Connects</h3>
             <div className="grid grid-cols-4 gap-3">
               {recentMatches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
@@ -65,7 +65,7 @@ export default function Matches() {
           </div>
 
           <div>
-            <h3 className="font-medium text-dark mb-3 text-sm">All Matches</h3>
+            <h3 className="font-medium text-dark mb-3 text-sm">All Your People</h3>
             <div className="space-y-3">
               {matches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
@@ -78,7 +78,7 @@ export default function Matches() {
                     ></div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-dark text-sm">{match.otherUser.name}</h4>
-                      <p className="text-gray-500 text-xs">Matched recently</p>
+                      <p className="text-gray-500 text-xs">Connected recently</p>
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-gray-400">
@@ -94,8 +94,8 @@ export default function Matches() {
       ) : (
         <div className="text-center py-12">
           <i className="fas fa-heart text-gray-300 text-4xl mb-4"></i>
-          <h3 className="font-medium text-gray-600 mb-2">No matches yet</h3>
-          <p className="text-gray-500 text-sm">Start swiping to find your connections!</p>
+          <h3 className="font-medium text-gray-600 mb-2">No connects yet</h3>
+          <p className="text-gray-500 text-sm">Start checking the yard to find your people!</p>
         </div>
       )}
     </section>

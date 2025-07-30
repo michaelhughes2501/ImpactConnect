@@ -60,9 +60,9 @@ export class MemStorage implements IStorage {
       password: "password123",
       name: "Marcus",
       age: 32,
-      bio: "Looking for genuine connections and someone who believes in second chances. Love hiking and cooking.",
-      occupation: "Community Volunteer",
-      education: "Trade School Graduate",
+      bio: "Been on the outside for 3 years now. Building my program one day at a time. Love cooking, staying solid, and finding real connections with people who understand the struggle. No fake people.",
+      occupation: "Construction Worker",
+      education: "GED, Welding Certificate (earned inside)",
       photos: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"],
       location: "2 miles away"
     });
@@ -72,11 +72,36 @@ export class MemStorage implements IStorage {
       password: "password123",
       name: "Sarah",
       age: 28,
-      bio: "Art therapist passionate about helping others. Love coffee, books, and meaningful conversations.",
-      occupation: "Art Therapist",
-      education: "Bachelor's Degree",
+      bio: "Former lifer, now free and focused on helping others through their re-entry journey. Looking for someone who gets it and wants to build something real together.",
+      occupation: "Peer Support Specialist",
+      education: "Bachelor's in Social Work (correspondence)",
       photos: ["https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400"],
       location: "5 miles away"
+    });
+
+    // Add additional sample users with more prison context
+    const user3 = await this.createUser({
+      email: "tommy@example.com",
+      password: "password123", 
+      name: "Tommy",
+      age: 35,
+      bio: "Did my bit, learned my lesson. 2 years clean and working hard. Looking for someone who knows the struggle and wants to move forward together.",
+      occupation: "Warehouse Supervisor",
+      education: "High School, Forklift Certified (got it inside)",
+      photos: ["https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400"],
+      location: "4 miles away"
+    });
+
+    const user4 = await this.createUser({
+      email: "maria@example.com",
+      password: "password123",
+      name: "Maria", 
+      age: 31,
+      bio: "Been out 5 years now. Got my program together, raising my kids, and ready for something real. No games, no drama - just looking for a solid connection.",
+      occupation: "CNA at Community Clinic",
+      education: "Nursing Assistant Certificate",
+      photos: ["https://images.unsplash.com/photo-1494790108755-2616b69b3322?w=400"],
+      location: "3 miles away"
     });
 
     // Create profiles
@@ -92,6 +117,20 @@ export class MemStorage implements IStorage {
       isVisible: true,
       privacySettings: {},
       stats: { profileViews: 95, matches: 18, responseRate: 92 }
+    });
+
+    await this.createOrUpdateProfile({
+      userId: user3.id,
+      isVisible: true,
+      privacySettings: {},
+      stats: { profileViews: 83, matches: 15, responseRate: 76 }
+    });
+
+    await this.createOrUpdateProfile({
+      userId: user4.id,
+      isVisible: true,
+      privacySettings: {},
+      stats: { profileViews: 156, matches: 31, responseRate: 94 }
     });
   }
 
@@ -111,6 +150,12 @@ export class MemStorage implements IStorage {
       isVerified: true, // Auto-verify for demo
       lastActive: new Date(),
       createdAt: new Date(),
+      location: insertUser.location || null,
+      bio: insertUser.bio || null,
+      occupation: insertUser.occupation || null,
+      education: insertUser.education || null,
+      photos: insertUser.photos || [],
+      preferences: insertUser.preferences || {},
     };
     this.users.set(id, user);
     return user;
@@ -151,6 +196,9 @@ export class MemStorage implements IStorage {
     const fullProfile: Profile = {
       ...profile,
       id,
+      isVisible: profile.isVisible ?? true,
+      privacySettings: profile.privacySettings || {},
+      stats: profile.stats || {},
     };
     this.profiles.set(profile.userId, fullProfile);
     return fullProfile;
@@ -161,6 +209,7 @@ export class MemStorage implements IStorage {
     const fullLike: Like = {
       ...like,
       id,
+      isSuper: like.isSuper ?? false,
       createdAt: new Date(),
     };
     this.likes.set(id, fullLike);
@@ -212,6 +261,7 @@ export class MemStorage implements IStorage {
     const fullMessage: Message = {
       ...message,
       id,
+      isRead: message.isRead ?? false,
       createdAt: new Date(),
     };
     this.messages.set(id, fullMessage);

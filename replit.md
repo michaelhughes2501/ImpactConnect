@@ -1,12 +1,32 @@
-# SecondChance Dating App
+# FreeWorld Connect Dating App
 
 ## Overview
 
-SecondChance is a modern dating application built with a full-stack TypeScript architecture. The application features a mobile-first design with swipe-based user discovery, real-time messaging, and comprehensive user matching capabilities. It's designed as a single-page application with a REST API backend.
+FreeWorld Connect is a modern dating application built specifically for justice impacted individuals with a full-stack TypeScript architecture. The application features a mobile-first design with swipe-based user discovery, real-time messaging, and comprehensive user matching capabilities. It uses authentic prison terminology and slang to create a familiar, relatable experience for formerly incarcerated individuals re-entering society.
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+Preferred communication style: Simple, everyday language with authentic prison terminology integrated throughout the interface.
+
+## Prison Terminology Integration
+
+The app uses authentic prison slang and terminology to create a familiar environment:
+
+- **Yard** - Discovery/browsing section (instead of "Discover")
+- **Connects** - Matches (instead of "Matches") 
+- **Kites** - Messages (prison term for letters/notes)
+- **Props** - Likes received (showing respect)
+- **Solid** - Trustworthy matches/connections
+- **Stay solid** - Encouragement to stay strong
+- **Check the yard** - Browse/look for people
+- **Filter Yard** - Search filters
+- **Profile Checks** - Profile views
+- **Free World** - Life outside prison
+- **Did my bit** - Served prison time
+- **Got my program together** - Life is organized/stable
+- **Stay protected out here** - Safety messaging
+- **Keep your business to yourself** - Privacy advice
+- **Background checked** - Verified profiles
 
 ## System Architecture
 

@@ -51,31 +51,31 @@ export default function Profile() {
         <p className="text-gray-600 text-sm">{user.age} years old</p>
         <div className="flex items-center justify-center space-x-2 mt-2">
           <i className="fas fa-check-circle text-success text-sm"></i>
-          <span className="text-success text-sm font-medium">Verified Profile</span>
+          <span className="text-success text-sm font-medium">Background Checked</span>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-semibold text-primary">{stats.profileViews || 0}</div>
-          <div className="text-xs text-gray-600">Profile Views</div>
+          <div className="text-xs text-gray-600">Profile Checks</div>
         </div>
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-semibold text-success">{stats.matches || 0}</div>
-          <div className="text-xs text-gray-600">Total Matches</div>
+          <div className="text-xs text-gray-600">Solid Connects</div>
         </div>
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-semibold text-secondary">{stats.responseRate || 0}%</div>
-          <div className="text-xs text-gray-600">Response Rate</div>
+          <div className="text-xs text-gray-600">Kite Back Rate</div>
         </div>
       </div>
 
       <div className="space-y-3 mb-6">
         <button className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-          <i className="fas fa-edit mr-2"></i>Edit Profile
+          <i className="fas fa-edit mr-2"></i>Update My Info
         </button>
         <button className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-          <i className="fas fa-rocket mr-2"></i>Boost Profile
+          <i className="fas fa-rocket mr-2"></i>Get More Visibility
         </button>
       </div>
 
@@ -83,11 +83,11 @@ export default function Profile() {
         <h3 className="font-medium text-dark text-sm mb-3">Settings & Privacy</h3>
         
         {[
-          { icon: "shield-alt", text: "Privacy Controls" },
-          { icon: "heart-pulse", text: "Safety Center" },
-          { icon: "bell", text: "Notifications" },
-          { icon: "cog", text: "Account Settings" },
-          { icon: "question-circle", text: "Help & Support" },
+          { icon: "shield-alt", text: "Keep It Private" },
+          { icon: "heart-pulse", text: "Stay Safe" },
+          { icon: "bell", text: "Alerts" },
+          { icon: "cog", text: "My Settings" },
+          { icon: "question-circle", text: "Need Help" },
         ].map((item, index) => (
           <button key={index} className="w-full flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
             <div className="flex items-center space-x-3">
@@ -100,12 +100,12 @@ export default function Profile() {
       </div>
 
       <div className="mt-6 p-4 bg-primary/10 border border-primary/20 rounded-lg">
-        <h4 className="font-medium text-dark text-sm mb-2">Community Guidelines</h4>
+        <h4 className="font-medium text-dark text-sm mb-2">Yard Rules</h4>
         <p className="text-gray-600 text-xs mb-3">
-          Creating a safe, respectful space for everyone in our community.
+          Keeping it real and respectful for everyone trying to build something out here.
         </p>
         <button className="text-primary text-sm font-medium hover:underline">
-          Read Guidelines →
+          Check the Rules →
         </button>
       </div>
     </section>
