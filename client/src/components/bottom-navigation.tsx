@@ -1,6 +1,6 @@
 interface BottomNavigationProps {
   activeTab: string;
-  onTabChange: (tab: "discover" | "matches" | "messages" | "profile") => void;
+  onTabChange: (tab: "discover" | "matches" | "messages" | "profile" | "resources") => void;
 }
 
 export default function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
@@ -8,6 +8,7 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
     { id: "discover" as const, icon: "search", label: "Yard" },
     { id: "matches" as const, icon: "heart", label: "Connects" },
     { id: "messages" as const, icon: "comment", label: "Kites" },
+    { id: "resources" as const, icon: "hands-helping", label: "Lifeline" },
     { id: "profile" as const, icon: "user", label: "My Info" },
   ];
 
@@ -18,14 +19,14 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center py-2 px-4 ${
+            className={`flex flex-col items-center py-2 px-2 relative ${
               activeTab === tab.id ? "text-primary" : "text-gray-400 hover:text-gray-600"
             }`}
           >
             <i className={`fas fa-${tab.icon} text-lg`}></i>
             <span className="text-xs mt-1">{tab.label}</span>
             {tab.id === "messages" && (
-              <div className="absolute top-1 right-3 w-2 h-2 bg-primary rounded-full"></div>
+              <div className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></div>
             )}
           </button>
         ))}
