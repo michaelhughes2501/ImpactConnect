@@ -1,9 +1,10 @@
+import SentenceCalculator from "../components/sentence-calculator";
+
 export default function Resources() {
   const sections = [
     {
       title: "Mind Right",
       subtitle: "Mental health support — coming home is hard, get some help",
-      color: "from-purple-500 to-indigo-600",
       iconBg: "bg-purple-100",
       iconColor: "text-purple-600",
       icon: "brain",
@@ -36,12 +37,18 @@ export default function Resources() {
           url: "https://www.nami.org",
           tag: "Nationwide",
         },
+        {
+          name: "988 Suicide & Crisis Lifeline",
+          description: "Call or text 988 — free mental health crisis support available 24/7",
+          phone: "Call or Text 988",
+          url: "https://988lifeline.org",
+          tag: "Free · 24/7",
+        },
       ],
     },
     {
       title: "Get Your Hustle Legal",
       subtitle: "Job placement and career resources for returning citizens",
-      color: "from-green-500 to-emerald-600",
       iconBg: "bg-green-100",
       iconColor: "text-green-600",
       icon: "briefcase",
@@ -74,22 +81,42 @@ export default function Resources() {
           url: "https://www.honestjobs.com",
           tag: "Online Job Board",
         },
+        {
+          name: "Federal Bonding Program",
+          description: "Free fidelity bonds for employers who hire returning citizens — removes the biggest hiring barrier",
+          phone: "1-800-233-2258",
+          url: "https://bonds4jobs.com",
+          tag: "Free Bonding · Nationwide",
+        },
       ],
     },
     {
       title: "Stay Out the System",
-      subtitle: "Parole, reentry, and legal support so you don't go back",
-      color: "from-orange-500 to-red-600",
+      subtitle: "Parole, reentry, and legal resources so you don't go back",
       iconBg: "bg-orange-100",
       iconColor: "text-orange-600",
       icon: "shield-alt",
       resources: [
         {
           name: "Reentry.net",
-          description: "State-by-state directory of reentry resources — housing, legal aid, and parole support",
+          description: "State-by-state directory of reentry programs — housing, parole support, legal aid, and more",
           phone: null,
           url: "https://www.reentry.net",
           tag: "All States",
+        },
+        {
+          name: "Root & Rebound",
+          description: "Free legal reentry guides — know your rights on parole and probation. Hotline available.",
+          phone: "510-279-4662",
+          url: "https://www.rootandrebound.org",
+          tag: "Free · Know Your Rights",
+        },
+        {
+          name: "National Reentry Resource Center",
+          description: "Federal hub for reentry programs, parole assistance, housing, and substance use support",
+          phone: null,
+          url: "https://nationalreentryresourcecenter.org",
+          tag: "Federal Resource",
         },
         {
           name: "Legal Aid Society",
@@ -99,32 +126,45 @@ export default function Resources() {
           tag: "Free Legal Help",
         },
         {
-          name: "National Reentry Resource Center",
-          description: "Federal resource hub for reentry programs, parole assistance, and housing support",
+          name: "Parole Compliance Help — ACLU",
+          description: "Know your rights during searches, home visits, and when dealing with your PO",
           phone: null,
-          url: "https://nationalreentryresourcecenter.org",
-          tag: "Federal Resource",
+          url: "https://www.aclu.org/issues/prisoners-rights/parole",
+          tag: "Know Your Rights",
         },
         {
-          name: "Root & Rebound",
-          description: "Free legal support and reentry guides — know your rights on parole and probation",
-          phone: "510-279-4662",
-          url: "https://www.rootandrebound.org",
-          tag: "Free · Know Your Rights",
+          name: "Restoration of Rights Project",
+          description: "State-by-state guide on restoring voting rights, gun rights, and clearing your record",
+          phone: null,
+          url: "https://ccresourcecenter.org/state-restoration-profiles",
+          tag: "Record Clearing · All States",
+        },
+        {
+          name: "Clean Slate Initiative",
+          description: "Automatic record clearing programs — check if your state automatically expunges your record",
+          phone: null,
+          url: "https://www.cleanslate.org",
+          tag: "Expungement · All States",
+        },
+        {
+          name: "Prisoner Rights & Parole Violations — FAMM",
+          description: "Sentencing reform advocacy, parole hearing support, and family resources for incarcerated individuals",
+          phone: "202-822-6700",
+          url: "https://famm.org",
+          tag: "Advocacy · Nationwide",
         },
       ],
     },
     {
       title: "Keep a Roof",
-      subtitle: "Housing and shelter resources for when you first touch down",
-      color: "from-blue-500 to-cyan-600",
+      subtitle: "Housing resources for when you first touch down",
       iconBg: "bg-blue-100",
       iconColor: "text-blue-600",
       icon: "home",
       resources: [
         {
           name: "HUD Resource Locator",
-          description: "Find federally approved housing near you — search shelters and transitional housing",
+          description: "Find federally approved housing near you — shelters and transitional housing",
           phone: "1-800-569-4287",
           url: "https://resources.hud.gov",
           tag: "Federal · Nationwide",
@@ -150,6 +190,8 @@ export default function Resources() {
       </div>
 
       <div className="px-4 py-4 space-y-6">
+        <SentenceCalculator />
+
         {sections.map((section) => (
           <div key={section.title} className="space-y-3">
             <div className="flex items-center gap-3">
