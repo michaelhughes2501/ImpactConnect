@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { Match, User } from "@shared/schema";
-
-// Mock current user ID
-const CURRENT_USER_ID = "user1";
+import { CURRENT_USER_ID } from "@/lib/currentUser";
 
 export default function Matches() {
   const { data: matches = [], isLoading } = useQuery<(Match & { otherUser: User })[]>({
@@ -14,7 +12,7 @@ export default function Matches() {
     return (
       <section className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-dark">Your Matches</h2>
+          <h2 className="font-semibold text-dark">Your Connects</h2>
           <div className="animate-pulse h-4 w-16 bg-gray-200 rounded"></div>
         </div>
         <div className="space-y-3">
@@ -38,7 +36,7 @@ export default function Matches() {
     <section className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-dark">Your Connects</h2>
-        <span className="text-sm text-gray-500">{matches.length} solid connections</span>
+        <span className="text-sm text-gray-500">{matches.length} solid connection{matches.length !== 1 ? "s" : ""}</span>
       </div>
 
       {matches.length > 0 ? (
@@ -49,10 +47,10 @@ export default function Matches() {
               {recentMatches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
                   <div className="text-center cursor-pointer">
-                    <div 
+                    <div
                       className="w-16 h-16 rounded-full bg-cover bg-center mb-2 border-2 border-primary"
-                      style={{ 
-                        backgroundImage: `url(${match.otherUser.photos?.[0] || 'https://via.placeholder.com/64'})` 
+                      style={{
+                        backgroundImage: `url(${match.otherUser.photos?.[0] || 'https://via.placeholder.com/64'})`,
                       }}
                     ></div>
                     <span className="text-xs text-gray-700 font-medium">
@@ -70,20 +68,21 @@ export default function Matches() {
               {matches.map((match) => (
                 <Link key={match.id} href={`/chat/${match.id}`}>
                   <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-full bg-cover bg-center flex-shrink-0"
-                      style={{ 
-                        backgroundImage: `url(${match.otherUser.photos?.[0] || 'https://via.placeholder.com/48'})` 
+                      style={{
+                        backgroundImage: `url(${match.otherUser.photos?.[0] || 'https://via.placeholder.com/48'})`,
                       }}
                     ></div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-dark text-sm">{match.otherUser.name}</h4>
-                      <p className="text-gray-500 text-xs">Connected recently</p>
+                      <p className="text-gray-500 text-xs">{match.otherUser.occupation}</p>
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-gray-400">
                         {new Date(match.createdAt!).toLocaleDateString()}
                       </div>
+                      <i className="fas fa-comment text-gray-300 text-xs mt-1"></i>
                     </div>
                   </div>
                 </Link>

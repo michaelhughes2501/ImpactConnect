@@ -5,9 +5,7 @@ import ProfileCard from "../components/profile-card";
 import SafetyBanner from "../components/safety-banner";
 import MatchModal from "../components/match-modal";
 import type { User, Match } from "@shared/schema";
-
-// Mock current user ID - in real app this would come from auth context
-const CURRENT_USER_ID = "user1";
+import { CURRENT_USER_ID } from "@/lib/currentUser";
 
 export default function Discover() {
   const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
@@ -38,7 +36,6 @@ export default function Discover() {
   };
 
   const handlePass = () => {
-    // In a real app, we might track passes as well
     queryClient.invalidateQueries({ queryKey: ['/api/discover', CURRENT_USER_ID] });
   };
 
@@ -47,7 +44,7 @@ export default function Discover() {
       <section className="p-4">
         <SafetyBanner />
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-dark">People Near You</h2>
+          <h2 className="font-semibold text-dark">Free World Connections</h2>
         </div>
         <div className="animate-pulse">
           <div className="h-96 bg-gray-200 rounded-xl mb-6"></div>

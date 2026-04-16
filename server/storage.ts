@@ -54,8 +54,33 @@ export class MemStorage implements IStorage {
   }
 
   private async seedData() {
-    // Create sample users
-    const user1 = await this.createUser({
+    // Fixed UUIDs so pages can reference the logged-in demo user reliably
+    const MARCUS_ID = "00000000-0000-0000-0000-000000000001";
+    const SARAH_ID  = "00000000-0000-0000-0000-000000000002";
+    const TOMMY_ID  = "00000000-0000-0000-0000-000000000003";
+    const MARIA_ID  = "00000000-0000-0000-0000-000000000004";
+    const DEJA_ID   = "00000000-0000-0000-0000-000000000005";
+    const RAY_ID    = "00000000-0000-0000-0000-000000000006";
+
+    const seedUser = (id: string, data: InsertUser): User => {
+      const user: User = {
+        ...data,
+        id,
+        isVerified: true,
+        lastActive: new Date(),
+        createdAt: new Date(),
+        location: data.location || null,
+        bio: data.bio || null,
+        occupation: data.occupation || null,
+        education: data.education || null,
+        photos: data.photos || [],
+        preferences: data.preferences || {},
+      };
+      this.users.set(id, user);
+      return user;
+    };
+
+    const user1 = seedUser(MARCUS_ID, {
       email: "marcus@example.com",
       password: "password123",
       name: "Marcus",
@@ -64,11 +89,11 @@ export class MemStorage implements IStorage {
       occupation: "Construction Worker",
       education: "GED, Welding Certificate (earned inside)",
       photos: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"],
-      location: "2 miles away"
+      location: "2 miles away",
     });
 
-    const user2 = await this.createUser({
-      email: "sarah@example.com", 
+    const user2 = seedUser(SARAH_ID, {
+      email: "sarah@example.com",
       password: "password123",
       name: "Sarah",
       age: 28,
@@ -76,32 +101,55 @@ export class MemStorage implements IStorage {
       occupation: "Peer Support Specialist",
       education: "Bachelor's in Social Work (correspondence)",
       photos: ["https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400"],
-      location: "5 miles away"
+      location: "5 miles away",
     });
 
-    // Add additional sample users with more prison context
-    const user3 = await this.createUser({
+    const user3 = seedUser(TOMMY_ID, {
       email: "tommy@example.com",
-      password: "password123", 
+      password: "password123",
       name: "Tommy",
       age: 35,
       bio: "Did my bid, came home changed. Been clean off the streets for 2 years, got my hustle legal now. Need a down chick who gets where I been and where I'm going.",
       occupation: "Warehouse Supervisor",
       education: "High School, Forklift Certified (got it inside)",
       photos: ["https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400"],
-      location: "4 miles away"
+      location: "4 miles away",
     });
 
-    const user4 = await this.createUser({
+    const user4 = seedUser(MARIA_ID, {
       email: "maria@example.com",
       password: "password123",
-      name: "Maria", 
+      name: "Maria",
       age: 31,
       bio: "Been home 5 years, got my program tight. Raising my babies and staying focused. Ready for a real one who ain't on no childish games - just solid vibes only.",
       occupation: "CNA at Community Clinic",
       education: "Nursing Assistant Certificate",
       photos: ["https://images.unsplash.com/photo-1494790108755-2616b69b3322?w=400"],
-      location: "3 miles away"
+      location: "3 miles away",
+    });
+
+    const user5 = seedUser(DEJA_ID, {
+      email: "deja@example.com",
+      password: "password123",
+      name: "Deja",
+      age: 27,
+      bio: "Touched down 18 months ago and haven't looked back. Staying out the mix, focused on my kids and my future. Looking for somebody real — no games, no bs.",
+      occupation: "Hair Stylist",
+      education: "Cosmetology License",
+      photos: ["https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400"],
+      location: "6 miles away",
+    });
+
+    const user6 = seedUser(RAY_ID, {
+      email: "ray@example.com",
+      password: "password123",
+      name: "Ray",
+      age: 38,
+      bio: "15 years behind those walls. Came home changed for real. Got my program together, working steady, staying out the mix. Just want somebody solid to build with.",
+      occupation: "Electrician Apprentice",
+      education: "Trade Certification (IBEW)",
+      photos: ["https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400"],
+      location: "7 miles away",
     });
 
     // Create profiles
@@ -131,6 +179,52 @@ export class MemStorage implements IStorage {
       isVisible: true,
       privacySettings: {},
       stats: { profileViews: 156, matches: 31, responseRate: 94 }
+    });
+
+    await this.createOrUpdateProfile({
+      userId: user5.id,
+      isVisible: true,
+      privacySettings: {},
+      stats: { profileViews: 64, matches: 9, responseRate: 81 }
+    });
+
+    await this.createOrUpdateProfile({
+      userId: user6.id,
+      isVisible: true,
+      privacySettings: {},
+      stats: { profileViews: 48, matches: 7, responseRate: 70 }
+    });
+
+    // Seed a mutual match between Marcus (logged-in demo user) and Sarah
+    const seedMatch = await this.createMatch({ user1Id: MARCUS_ID, user2Id: SARAH_ID });
+
+    // Seed a couple of messages in that match so Kites tab has content
+    await this.createMessage({
+      matchId: seedMatch.id,
+      senderId: SARAH_ID,
+      content: "Hey! Glad we connected. Stay solid out here 💪",
+      isRead: false,
+    });
+    await this.createMessage({
+      matchId: seedMatch.id,
+      senderId: MARCUS_ID,
+      content: "Facts. It's hard but we making it. How long you been home?",
+      isRead: true,
+    });
+    await this.createMessage({
+      matchId: seedMatch.id,
+      senderId: SARAH_ID,
+      content: "Almost a year now. Got my program together. You?",
+      isRead: false,
+    });
+
+    // Seed a match between Marcus and Maria
+    const seedMatch2 = await this.createMatch({ user1Id: MARCUS_ID, user2Id: MARIA_ID });
+    await this.createMessage({
+      matchId: seedMatch2.id,
+      senderId: MARIA_ID,
+      content: "Real recognize real. Keep your head up 🙏",
+      isRead: false,
     });
   }
 

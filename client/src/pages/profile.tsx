@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { User, Profile } from "@shared/schema";
-
-// Mock current user ID
-const CURRENT_USER_ID = "user1";
+import { CURRENT_USER_ID } from "@/lib/currentUser";
 
 export default function Profile() {
   const { data: user, isLoading: userLoading } = useQuery<User>({
@@ -41,19 +39,26 @@ export default function Profile() {
   return (
     <section className="p-4">
       <div className="text-center mb-6">
-        <div 
+        <div
           className="w-24 h-24 rounded-full bg-cover bg-center mx-auto mb-3 border-4 border-primary/20"
-          style={{ 
-            backgroundImage: `url(${user.photos?.[0] || 'https://via.placeholder.com/96'})` 
+          style={{
+            backgroundImage: `url(${user.photos?.[0] || 'https://via.placeholder.com/96'})`,
           }}
         ></div>
-        <h2 className="font-semibold text-dark text-lg">{user.name}</h2>
-        <p className="text-gray-600 text-sm">{user.age} years old</p>
+        <h2 className="font-semibold text-dark text-lg">{user.name}, {user.age}</h2>
+        <p className="text-gray-500 text-sm">{user.occupation}</p>
+        <p className="text-gray-500 text-xs">{user.location}</p>
         <div className="flex items-center justify-center space-x-2 mt-2">
           <i className="fas fa-check-circle text-success text-sm"></i>
           <span className="text-success text-sm font-medium">Background Checked</span>
         </div>
       </div>
+
+      {user.bio && (
+        <div className="bg-gray-50 rounded-xl p-4 mb-6">
+          <p className="text-gray-700 text-sm leading-relaxed">"{user.bio}"</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center p-3 bg-gray-50 rounded-lg">
@@ -81,7 +86,7 @@ export default function Profile() {
 
       <div className="space-y-3">
         <h3 className="font-medium text-dark text-sm mb-3">Settings & Privacy</h3>
-        
+
         {[
           { icon: "shield-alt", text: "Keep It Private" },
           { icon: "heart-pulse", text: "Stay Safe" },

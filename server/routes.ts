@@ -92,6 +92,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Single match with both users — used by the chat page
+  app.get("/api/match/:matchId", async (req, res) => {
+    try {
+      const { matchId } = req.params;
+      const match = await storage.getMatch(matchId);
+      if (!match) return res.status(404).json({ message: "Match not found" });
+      const user1 = await storage.getUser(match.user1Id);
+      const user2 = await storage.getUser(match.user2Id);
+      res.json({
+        ...match,
+        user1: user1 ? { ...user1, password: undefined } : null,
+        user2: user2 ? { ...user2, password: undefined } : null,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get match", error });
+    }
+  });
+
   // Message routes
   app.post("/api/messages", async (req, res) => {
     try {
