@@ -3,6 +3,10 @@ import { pgTable, text, varchar, integer, boolean, timestamp, jsonb } from "driz
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Re-export auth tables so db:push creates them
+export { sessions, authUsers } from "./models/auth";
+export type { AuthUser, UpsertAuthUser } from "./models/auth";
+
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
