@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "_IcuL_DKfXfCYghWrQwpw"
+uri = "file://artifacts/mockup-sandbox/public/images/sarah-fwc.png"
+type = "image"
+title = "Candid photo of 28yo woman"
+
+[[generated]]
+id = "QMeL4EmS4jL5x4VM-fDQK"
+uri = "file://artifacts/mockup-sandbox/public/images/sarah.png"
+type = "image"
+title = "Profile photo of Sarah, 28"
+
+[[generated]]
+id = "ei94yl_tWrD82eG4IM039"
+uri = "file://artifacts/mockup-sandbox/public/images/sarah-profile.png"
+type = "image"
+title = "Portrait of 28yo woman Sarah"
