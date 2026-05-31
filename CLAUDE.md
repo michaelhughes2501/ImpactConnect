@@ -4,7 +4,7 @@ Guidance for Claude Code (and humans) when working in this repository.
 
 ## Project overview
 
-**FreeWorld Connect** (this repo, code-named **ImpactConnect**) is a mobile-first dating app for justice-impacted individuals. It uses swipe-based discovery ("The Yard"), kite-style messaging ("Kites"), and a like/match system ("Props"). The UI deliberately leans on authentic reentry/prison terminology to feel familiar to the target audience.
+**FreeWorld Connect** (this repo, code-named **ImpactConnect**) is a mobile-first dating app for justice-impacted individuals. It uses swipe-based discovery ("The Yard"), kite-style messaging ("Kites"), likes received ("Props"), and mutual matches ("Connects"). The UI deliberately leans on authentic reentry/prison terminology to feel familiar to the target audience.
 
 For deeper architecture and design history, see [`replit.md`](./replit.md).
 
@@ -106,7 +106,7 @@ Generate insert/select schemas with `drizzle-zod` so server validation and TS ty
 - `POST /api/likes` — create like (creates a match if reciprocal)
 - `GET  /api/matches/:userId`, `GET /api/match/:matchId`
 - Messaging endpoints (history, send, read)
-- Profile read/update
+- `GET /api/profiles/:userId` and `GET /api/users/:id` — profile read (no update endpoint exists yet; add via `storage.createOrUpdateProfile` when wiring profile editing)
 
 ## Build & deploy
 
@@ -123,7 +123,7 @@ Generate insert/select schemas with `drizzle-zod` so server validation and TS ty
 - **UI primitives**: add new components with `npx shadcn add <component>` to keep `components.json` aligned. Custom components go alongside the page that uses them or in `client/src/components/`.
 - **Schema changes**: edit `shared/schema.ts`, run `npm run db:push`, regenerate Zod schemas. Never apply ad-hoc SQL.
 - **Mobile-first**: design every new screen for narrow viewports first; the `bottom-navigation.tsx` is the primary navigation surface.
-- **Authentic terminology**: keep the prison/reentry slang already in the UI (Yard, Kites, Props, Cellies). Update copy alongside any rename.
+- **Authentic terminology**: keep the prison/reentry slang already in the UI (Yard, Kites, Props, Connects, Cellies). Update copy alongside any rename.
 
 ## Notable repo concerns
 
