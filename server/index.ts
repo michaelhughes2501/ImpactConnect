@@ -38,7 +38,25 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  await setupAuth(app);
+  // Only initialize Replit Auth if we have a real REPL_ID (not the local placeholder)
+  if (process.env.REPL_ID && process.env.REPL_ID !== "local-development-id") {
+    await setupAuth(app);
+  } else {
+    // Mock authentication for local development to bypass Replit OIDC requirements
+    log("Local development: Skipping Replit Auth and injecting mock session");
+    
+    app.use((req, _res, next) => {
+      req.isAuthenticated = () => true;
+      (req as any).user = { id: 1, username: "local_dev_user", claims: { sub: "local-sub" } };
+      next();
+    });
+
+    // Mock the endpoint that the frontend's useAuth hook expects
+    app.get("/api/auth/user", (_req, res) => {
+      res.json({ id: 1, username: "local_dev_user", claims: { sub: "local-sub" } });
+    });
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -62,7 +80,7 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const port = parseInt(process.env.PORT || '3000', 10);
   server.listen({
     port,
     host: "0.0.0.0",
