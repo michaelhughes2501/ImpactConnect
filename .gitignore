@@ -7,3 +7,6 @@ vite.config.ts.*
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
+
+# Local environment (use .env.example as a template)
+.env
