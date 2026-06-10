@@ -11,7 +11,7 @@ import {
   type InsertMessage,
   users, profiles, matches, likes, messages
 } from "@shared/schema";
-import { db } from "./db";
+import { db, DATABASE_READY } from "./db";
 import { eq, and, or, ne, inArray, notInArray, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
@@ -545,4 +545,8 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// Use the Postgres-backed store when a database is configured; otherwise fall
+// back to the seeded in-memory store so the app runs locally with no backend.
+export const storage: IStorage = DATABASE_READY
+  ? new DatabaseStorage()
+  : new MemStorage();
