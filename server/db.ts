@@ -16,11 +16,20 @@ export const pool = DATABASE_READY
   : undefined;
 
 // Typed as a Drizzle client for call sites, but only constructed when a
-// database is configured. It is never dereferenced while DATABASE_READY is
-// false (storage falls back to MemStorage and auth setup is skipped).
+// database is configured. When unconfigured it's a Proxy that throws a clear
+// error on any access, instead of a cryptic "Cannot read properties of
+// undefined" — storage falls back to MemStorage and auth setup is skipped, so
+// this is never dereferenced in the in-memory path.
 export const db = (DATABASE_READY
   ? drizzle({ client: pool!, schema })
-  : undefined) as ReturnType<typeof drizzle>;
+  : new Proxy({} as ReturnType<typeof drizzle>, {
+      get() {
+        throw new Error(
+          "Database client is not initialized because DATABASE_URL is not set. " +
+            "Set DATABASE_URL to use the Postgres-backed storage layer.",
+        );
+      },
+    })) as ReturnType<typeof drizzle>;
 
 if (!DATABASE_READY) {
   // eslint-disable-next-line no-console
