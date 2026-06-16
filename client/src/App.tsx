@@ -27,6 +27,11 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/discover" component={() => <Home initialTab="discover" />} />
+      <Route path="/matches" component={() => <Home initialTab="matches" />} />
+      <Route path="/messages" component={() => <Home initialTab="messages" />} />
+      <Route path="/profile" component={() => <Home initialTab="profile" />} />
+      <Route path="/resources" component={() => <Home initialTab="resources" />} />
       <Route path="/chat/:matchId" component={Chat} />
       <Route component={NotFound} />
     </Switch>

@@ -1,9 +1,17 @@
-import { Shield, Heart, MessageSquare } from "lucide-react";
+import { Shield, Heart, MessageSquare, Users, Lock, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0 },
+};
+
+const stagger = {
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const staggerDelayed = {
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
 };
 
 export default function Landing() {
@@ -32,12 +40,19 @@ export default function Landing() {
             FREE<span className="text-amber-500">WORLD</span>
           </span>
         </div>
+        <a
+          href="/api/login"
+          className="text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
+        >
+          Sign In
+        </a>
       </header>
 
-      <main className="relative flex-1 flex flex-col items-center justify-center px-6 text-center">
+      <main className="relative flex-1 flex flex-col items-center px-6 text-center">
+        {/* Hero */}
         <motion.div
-          className="mb-8"
-          variants={{ show: { transition: { staggerChildren: 0.12 } } }}
+          className="mb-12 mt-6 w-full max-w-sm"
+          variants={stagger}
           initial="hidden"
           animate="show"
         >
@@ -49,7 +64,10 @@ export default function Landing() {
             Everyone's Background Checked
           </motion.div>
 
-          <motion.h1 variants={fadeUp} className="text-5xl font-black tracking-tighter leading-none mb-6">
+          <motion.h1
+            variants={fadeUp}
+            className="text-5xl font-black tracking-tighter leading-none mb-6"
+          >
             The yard for
             <br />
             <span className="text-amber-500">real ones</span>
@@ -57,8 +75,12 @@ export default function Landing() {
             only.
           </motion.h1>
 
-          <motion.p variants={fadeUp} className="text-neutral-400 text-lg leading-relaxed max-w-sm mx-auto mb-10">
-            A space built by and for people who know what it's like behind those walls — and who came home ready to build something real.
+          <motion.p
+            variants={fadeUp}
+            className="text-neutral-400 text-lg leading-relaxed max-w-sm mx-auto mb-10"
+          >
+            A space built by and for people who know what it's like behind those
+            walls — and who came home ready to build something real.
           </motion.p>
 
           <motion.a
@@ -71,14 +93,18 @@ export default function Landing() {
             Get Into the Yard
           </motion.a>
 
-          <motion.p variants={fadeUp} className="text-neutral-600 text-sm mt-4">
+          <motion.p
+            variants={fadeUp}
+            className="text-neutral-600 text-sm mt-4"
+          >
             No judgment. No pretending. Solid vibes only.
           </motion.p>
         </motion.div>
 
+        {/* Feature pills */}
         <motion.div
-          className="w-full max-w-sm grid grid-cols-3 gap-4 mt-8"
-          variants={{ show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } } }}
+          className="w-full max-w-sm grid grid-cols-3 gap-4 mb-16"
+          variants={staggerDelayed}
           initial="hidden"
           animate="show"
         >
@@ -99,10 +125,92 @@ export default function Landing() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* How It Works */}
+        <motion.div
+          className="w-full max-w-sm mb-16"
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-2xl font-black tracking-tighter mb-8 text-neutral-100">
+            How it <span className="text-amber-500">works</span>
+          </h2>
+          <div className="flex flex-col gap-5">
+            {[
+              {
+                icon: Lock,
+                step: "01",
+                title: "Sign in securely",
+                desc: "Create your jacket. Your background is checked — so is everyone else's. No fakes.",
+              },
+              {
+                icon: Users,
+                step: "02",
+                title: "Walk the Yard",
+                desc: "Browse profiles of people near you who share the experience. Swipe, like, connect.",
+              },
+              {
+                icon: Zap,
+                step: "03",
+                title: "Send a Kite",
+                desc: "When it's mutual, the doors open. Message your Connects in private.",
+              },
+            ].map(({ icon: Icon, step, title, desc }) => (
+              <div
+                key={step}
+                className="flex items-start gap-4 text-left bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-amber-400" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-0.5">
+                    Step {step}
+                  </div>
+                  <div className="text-sm font-bold text-neutral-200 mb-1">
+                    {title}
+                  </div>
+                  <div className="text-xs text-neutral-500 leading-relaxed">
+                    {desc}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          className="w-full max-w-sm mb-16 text-center"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="text-neutral-400 text-base mb-6 leading-relaxed">
+            Ready to touch down on the outside with people who actually get it?
+          </p>
+          <motion.a
+            href="/api/login"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center justify-center gap-2 w-full bg-neutral-900 border border-amber-500/30 text-amber-400 font-bold text-sm py-3 px-6 rounded-2xl hover:border-amber-500/60 hover:bg-amber-500/5 transition-all"
+          >
+            <Heart className="w-4 h-4" />
+            Join FreeWorld Connect
+          </motion.a>
+        </motion.div>
       </main>
 
-      <footer className="relative px-6 py-8 text-center text-neutral-700 text-xs">
-        Keep it 100. Stay out the mix. Stay protected out here.
+      <footer className="relative px-6 py-8 text-center text-neutral-700 text-xs border-t border-neutral-900">
+        <p className="mb-2">
+          Keep it 100. Stay out the mix. Stay protected out here.
+        </p>
+        <p className="text-neutral-800">
+          &copy; {new Date().getFullYear()} FreeWorld Connect. Built for the community.
+        </p>
       </footer>
     </div>
   );
