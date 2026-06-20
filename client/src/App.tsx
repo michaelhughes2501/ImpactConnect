@@ -27,6 +27,21 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/discover">
+        <Home key="discover" initialTab="discover" />
+      </Route>
+      <Route path="/matches">
+        <Home key="matches" initialTab="matches" />
+      </Route>
+      <Route path="/messages">
+        <Home key="messages" initialTab="messages" />
+      </Route>
+      <Route path="/profile">
+        <Home key="profile" initialTab="profile" />
+      </Route>
+      <Route path="/resources">
+        <Home key="resources" initialTab="resources" />
+      </Route>
       <Route path="/chat/:matchId" component={Chat} />
       <Route component={NotFound} />
     </Switch>

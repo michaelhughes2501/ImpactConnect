@@ -9,8 +9,12 @@ import Resources from "./resources";
 
 type Tab = "discover" | "matches" | "messages" | "profile" | "resources";
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("discover");
+interface HomeProps {
+  initialTab?: Tab;
+}
+
+export default function Home({ initialTab = "discover" }: HomeProps) {
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
 
   const renderActiveTab = () => {
     switch (activeTab) {
