@@ -45,7 +45,7 @@ function shapeTokens(data: GoogleTokenResponse) {
 export function registerIntegrationsRoutes(app: Express): void {
   app.post("/api/integrations/oauth/exchange", async (req, res) => {
     try {
-      const { code, codeVerifier, redirectUri } = req.body as ExchangeBody;
+      const { code, codeVerifier, redirectUri } = (req.body || {}) as ExchangeBody;
       if (!code || !codeVerifier || !redirectUri) {
         return res.status(400).json({ message: "Missing required fields." });
       }
@@ -82,7 +82,7 @@ export function registerIntegrationsRoutes(app: Express): void {
 
   app.post("/api/integrations/oauth/refresh", async (req, res) => {
     try {
-      const { refreshToken } = req.body as RefreshBody;
+      const { refreshToken } = (req.body || {}) as RefreshBody;
       if (!refreshToken) {
         return res.status(400).json({ message: "Missing refreshToken." });
       }

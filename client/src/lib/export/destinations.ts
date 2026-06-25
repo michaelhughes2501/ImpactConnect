@@ -6,10 +6,12 @@ import type { ExportDestination, ExportPayload, ExportResult } from "./types";
 
 const SENDERS: Record<IntegrationId, (token: string, payload: ExportPayload) => Promise<ExportResult>> = {
   "google-classroom": async (token, payload) => {
-    const courses = await fetch(
+    const coursesRes = await fetch(
       "https://classroom.googleapis.com/v1/courses?courseStates=ACTIVE&pageSize=1",
       { headers: { Authorization: `Bearer ${token}` } },
-    ).then((r) => r.json());
+    );
+    if (!coursesRes.ok) return { ok: false, message: await coursesRes.text() };
+    const courses = await coursesRes.json();
     const courseId = courses?.courses?.[0]?.id;
     if (!courseId) return { ok: false, message: "No active Classroom course found." };
     const res = await fetch(
@@ -47,7 +49,7 @@ const SENDERS: Record<IntegrationId, (token: string, payload: ExportPayload) => 
     });
     if (!create.ok) return { ok: false, message: await create.text() };
     const doc = await create.json();
-    await fetch(
+    const updateRes = await fetch(
       `https://docs.googleapis.com/v1/documents/${doc.documentId}:batchUpdate`,
       {
         method: "POST",
@@ -62,6 +64,7 @@ const SENDERS: Record<IntegrationId, (token: string, payload: ExportPayload) => 
         }),
       },
     );
+    if (!updateRes.ok) return { ok: false, message: await updateRes.text() };
     return {
       ok: true,
       url: `https://docs.google.com/document/d/${doc.documentId}/edit`,
@@ -98,7 +101,7 @@ const SENDERS: Record<IntegrationId, (token: string, payload: ExportPayload) => 
       },
     }));
     if (items.length) {
-      await fetch(
+      const updateRes = await fetch(
         `https://forms.googleapis.com/v1/forms/${form.formId}:batchUpdate`,
         {
           method: "POST",
@@ -109,6 +112,7 @@ const SENDERS: Record<IntegrationId, (token: string, payload: ExportPayload) => 
           body: JSON.stringify({ requests: items }),
         },
       );
+      if (!updateRes.ok) return { ok: false, message: await updateRes.text() };
     }
     return { ok: true, url: form.responderUri };
   },

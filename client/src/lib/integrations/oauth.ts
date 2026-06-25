@@ -5,7 +5,7 @@ import type {
   IntegrationTokens,
 } from "./types";
 import { getProvider } from "./providers";
-import { loadTokens, saveTokens, isExpired } from "./tokens";
+import { loadTokens, saveTokens, clearTokens, isExpired } from "./tokens";
 
 const CLIENT_ID =
   (import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID as string | undefined) ?? "";
@@ -121,15 +121,20 @@ export async function getFreshAccessToken(
   if (!isExpired(tokens)) return tokens.accessToken;
   if (!tokens.refreshToken) return null;
 
-  const res = await apiRequest("POST", "/api/integrations/oauth/refresh", {
-    integrationId: id,
-    refreshToken: tokens.refreshToken,
-  });
-  const refreshed = (await res.json()) as IntegrationTokens;
-  const merged: IntegrationTokens = {
-    ...refreshed,
-    refreshToken: refreshed.refreshToken ?? tokens.refreshToken,
-  };
-  saveTokens(id, merged);
-  return merged.accessToken;
+  try {
+    const res = await apiRequest("POST", "/api/integrations/oauth/refresh", {
+      integrationId: id,
+      refreshToken: tokens.refreshToken,
+    });
+    const refreshed = (await res.json()) as IntegrationTokens;
+    const merged: IntegrationTokens = {
+      ...refreshed,
+      refreshToken: refreshed.refreshToken ?? tokens.refreshToken,
+    };
+    saveTokens(id, merged);
+    return merged.accessToken;
+  } catch {
+    clearTokens(id);
+    return null;
+  }
 }

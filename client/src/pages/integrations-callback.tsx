@@ -1,14 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { completeCallback } from "@/lib/integrations/oauth";
+
+type CallbackPromise = ReturnType<typeof completeCallback>;
 
 export default function IntegrationsCallback() {
   const [, navigate] = useLocation();
   const [error, setError] = useState<string | null>(null);
+  const promiseRef = useRef<CallbackPromise | null>(null);
 
   useEffect(() => {
+    if (!promiseRef.current) {
+      promiseRef.current = completeCallback(window.location.search);
+    }
     let cancelled = false;
-    completeCallback(window.location.search)
+    promiseRef.current
       .then(({ returnTo }) => {
         if (!cancelled) navigate(returnTo || "/integrations");
       })

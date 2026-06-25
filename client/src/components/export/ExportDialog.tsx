@@ -37,19 +37,28 @@ export default function ExportDialog({ open, onOpenChange, payload }: Props) {
 
   async function handleExport() {
     setRunning(true);
-    const { results } = await runExport({
-      payload,
-      destinationIds: Array.from(selected),
-    });
-    setRunning(false);
-    onOpenChange(false);
-    setSelected(new Set());
-    for (const { destination, result } of results) {
-      toast({
-        title: `${destination.label}: ${result.ok ? "Exported" : "Failed"}`,
-        description: result.url ?? result.message,
-        variant: result.ok ? "default" : "destructive",
+    try {
+      const { results } = await runExport({
+        payload,
+        destinationIds: Array.from(selected),
       });
+      onOpenChange(false);
+      setSelected(new Set());
+      for (const { destination, result } of results) {
+        toast({
+          title: `${destination.label}: ${result.ok ? "Exported" : "Failed"}`,
+          description: result.url ?? result.message,
+          variant: result.ok ? "default" : "destructive",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "Export failed",
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive",
+      });
+    } finally {
+      setRunning(false);
     }
   }
 
