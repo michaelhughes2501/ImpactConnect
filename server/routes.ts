@@ -3,10 +3,12 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertLikeSchema, insertMessageSchema } from "@shared/schema";
 import { registerAuthRoutes } from "./replit_integrations/auth";
+import { registerIntegrationsRoutes } from "./routes/integrations";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   registerAuthRoutes(app);
+  registerIntegrationsRoutes(app);
   // Auth routes
   app.post("/api/auth/register", async (req, res) => {
     try {

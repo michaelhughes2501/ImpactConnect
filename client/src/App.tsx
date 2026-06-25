@@ -7,6 +7,8 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "./pages/chat";
 import Landing from "./pages/landing";
+import IntegrationsPage from "@/pages/integrations";
+import IntegrationsCallback from "@/pages/integrations-callback";
 import { useAuth } from "@/hooks/use-auth";
 
 function Router() {
@@ -28,6 +30,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/chat/:matchId" component={Chat} />
+      <Route path="/integrations" component={IntegrationsPage} />
+      <Route path="/integrations/callback" component={IntegrationsCallback} />
       <Route component={NotFound} />
     </Switch>
   );
