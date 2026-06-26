@@ -4,3 +4,9 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+
+# Local environment (use .env.example as a template)
+.env

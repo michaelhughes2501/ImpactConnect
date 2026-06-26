@@ -7,9 +7,12 @@ import {
   type InsertMatch,
   type Like, 
   type InsertLike,
-  type Message, 
-  type InsertMessage 
+  type Message,
+  type InsertMessage,
+  users, profiles, matches, likes, messages
 } from "@shared/schema";
+import { db, DATABASE_READY } from "./db";
+import { eq, and, or, ne, inArray, notInArray, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -405,4 +408,145 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const id = randomUUID();
+    const [user] = await db.insert(users).values({
+      ...insertUser,
+      id,
+      isVerified: true,
+      lastActive: new Date(),
+      createdAt: new Date(),
+    }).returning();
+    return user;
+  }
+
+  async updateUser(id: string, updates: Partial<User>): Promise<User | undefined> {
+    const [user] = await db.update(users).set(updates).where(eq(users.id, id)).returning();
+    return user;
+  }
+
+  async getUsersForDiscovery(currentUserId: string, limit: number = 10): Promise<User[]> {
+    const userLikes = await db.select({ toUserId: likes.toUserId }).from(likes).where(eq(likes.fromUserId, currentUserId));
+    const likedUserIds = userLikes.map(l => l.toUserId);
+
+    const conditions = [ne(users.id, currentUserId)];
+    if (likedUserIds.length > 0) {
+      conditions.push(notInArray(users.id, likedUserIds));
+    }
+
+    return db.select().from(users).where(and(...conditions)).limit(limit);
+  }
+
+  async getProfile(userId: string): Promise<Profile | undefined> {
+    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId));
+    return profile;
+  }
+
+  async createOrUpdateProfile(profile: InsertProfile): Promise<Profile> {
+    const [existing] = await db.select().from(profiles).where(eq(profiles.userId, profile.userId));
+    if (existing) {
+      const [updated] = await db.update(profiles).set(profile).where(eq(profiles.userId, profile.userId)).returning();
+      return updated;
+    }
+    const id = randomUUID();
+    const [created] = await db.insert(profiles).values({ ...profile, id }).returning();
+    return created;
+  }
+
+  async createLike(like: InsertLike): Promise<Like> {
+    const id = randomUUID();
+    const [newLike] = await db.insert(likes).values({ ...like, id, createdAt: new Date() }).returning();
+    return newLike;
+  }
+
+  async getLikesBetweenUsers(user1Id: string, user2Id: string): Promise<Like[]> {
+    return db.select().from(likes).where(
+      or(
+        and(eq(likes.fromUserId, user1Id), eq(likes.toUserId, user2Id)),
+        and(eq(likes.fromUserId, user2Id), eq(likes.toUserId, user1Id))
+      )
+    );
+  }
+
+  async getUserLikes(userId: string): Promise<Like[]> {
+    return db.select().from(likes).where(eq(likes.toUserId, userId));
+  }
+
+  async createMatch(match: InsertMatch): Promise<Match> {
+    const id = randomUUID();
+    const [newMatch] = await db.insert(matches).values({ ...match, id, createdAt: new Date() }).returning();
+    return newMatch;
+  }
+
+  async getUserMatches(userId: string): Promise<(Match & { otherUser: User })[]> {
+    const userMatches = await db.select().from(matches).where(
+      or(eq(matches.user1Id, userId), eq(matches.user2Id, userId))
+    );
+
+    return Promise.all(userMatches.map(async (match) => {
+      const otherUserId = match.user1Id === userId ? match.user2Id : match.user1Id;
+      const [otherUser] = await db.select().from(users).where(eq(users.id, otherUserId));
+      return { ...match, otherUser: otherUser! };
+    }));
+  }
+
+  async getMatch(id: string): Promise<Match | undefined> {
+    const [match] = await db.select().from(matches).where(eq(matches.id, id));
+    return match;
+  }
+
+  async createMessage(message: InsertMessage): Promise<Message> {
+    const id = randomUUID();
+    const [newMessage] = await db.insert(messages).values({ ...message, id, createdAt: new Date() }).returning();
+    return newMessage;
+  }
+
+  async getMatchMessages(matchId: string): Promise<Message[]> {
+    return db.select().from(messages).where(eq(messages.matchId, matchId)).orderBy(messages.createdAt);
+  }
+
+  async markMessagesAsRead(matchId: string, userId: string): Promise<void> {
+    await db.update(messages)
+      .set({ isRead: true })
+      .where(and(eq(messages.matchId, matchId), ne(messages.senderId, userId)));
+  }
+
+  async getRecentMessages(userId: string): Promise<(Message & { match: Match; otherUser: User })[]> {
+    const userMatches = await this.getUserMatches(userId);
+    const matchIds = userMatches.map(match => match.id);
+    if (matchIds.length === 0) return [];
+
+    const messagesList = await db.select().from(messages)
+      .where(inArray(messages.matchId, matchIds))
+      .orderBy(desc(messages.createdAt));
+
+    const latestByMatch = new Map<string, Message>();
+    for (const message of messagesList) {
+      if (!latestByMatch.has(message.matchId)) {
+        latestByMatch.set(message.matchId, message);
+      }
+    }
+
+    return Array.from(latestByMatch.values()).map(message => {
+      const match = userMatches.find(m => m.id === message.matchId)!;
+      return { ...message, match, otherUser: match.otherUser };
+    });
+  }
+}
+
+// Use the Postgres-backed store when a database is configured; otherwise fall
+// back to the seeded in-memory store so the app runs locally with no backend.
+export const storage: IStorage = DATABASE_READY
+  ? new DatabaseStorage()
+  : new MemStorage();
