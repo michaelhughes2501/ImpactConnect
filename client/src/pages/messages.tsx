@@ -1,11 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Message, Match, User } from "@shared/schema";
 import { CURRENT_USER_ID } from "@/lib/currentUser";
 
 export default function Messages() {
   const { data: recentMessages = [], isLoading } = useQuery<(Message & { match: Match; otherUser: User })[]>({
     queryKey: ['/api/messages/recent', CURRENT_USER_ID],
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: async (matchIds: string[]) => {
+      await Promise.all(
+        matchIds.map((matchId) =>
+          apiRequest('PATCH', `/api/messages/read/${matchId}/${CURRENT_USER_ID}`)
+        )
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/messages/recent', CURRENT_USER_ID] });
+    },
   });
 
   if (isLoading) {
@@ -42,7 +56,21 @@ export default function Messages() {
             <span className="ml-2 bg-primary text-white text-xs px-2 py-0.5 rounded-full">{unreadCount} new</span>
           )}
         </h2>
-        <button className="text-primary text-sm font-medium">Mark read</button>
+        {unreadCount > 0 && (
+          <button
+            className="text-primary text-sm font-medium hover:underline disabled:opacity-50 disabled:no-underline"
+            disabled={markAllReadMutation.isPending}
+            onClick={() =>
+              markAllReadMutation.mutate(
+                recentMessages
+                  .filter((m) => !m.isRead && m.senderId !== CURRENT_USER_ID)
+                  .map((m) => m.match.id)
+              )
+            }
+          >
+            {markAllReadMutation.isPending ? "Marking…" : "Mark read"}
+          </button>
+        )}
       </div>
 
       {recentMessages.length > 0 ? (

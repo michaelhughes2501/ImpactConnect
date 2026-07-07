@@ -28,7 +28,9 @@ function Router() {
 
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/">
+        <Home />
+      </Route>
       <Route path="/discover">
         <Home key="discover" initialTab="discover" />
       </Route>
