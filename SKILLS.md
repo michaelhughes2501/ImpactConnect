@@ -6,7 +6,7 @@ A short cookbook of project-specific procedures. For overall architecture, see `
 
 ## Add a new SPA route
 
-Routes live in `client/src/App.tsx` inside the authenticated `<Switch>`. Pages `discover`, `matches`, `messages`, `profile`, `resources` exist in `client/src/pages/` but aren't currently mounted — adding a route is usually just:
+Routes live in `client/src/App.tsx` inside the authenticated `<Switch>`. Pages `discover`, `matches`, `messages`, `profile`, `resources` exist in `client/src/pages/` but aren't always mounted — adding a route is usually just:
 
 ```tsx
 <Route path="/discover" component={Discover} />
@@ -16,25 +16,37 @@ For URL params, Wouter uses `:name` syntax; access via `useRoute("/chat/:matchId
 
 ## Add an API endpoint
 
-In `server/routes.ts`. Decide first whether the endpoint needs a logged-in identity:
+Two locations: dating-feature routes go in `server/routes.ts`; the integrations subsystem lives in `server/routes/integrations.ts`. Decide first whether the endpoint needs a logged-in identity:
 
 ```ts
 import { isAuthenticated } from "./replit_integrations/auth";
 
 app.get("/api/foo", isAuthenticated, async (req: any, res) => {
   const userId = req.user.claims.sub;          // Replit OIDC subject
-  const result = await storage.getFoo(userId); // call MemStorage, NOT Drizzle
+  const result = await storage.getFoo(userId); // call MemStorage / storage layer
   res.json(result);
 });
 ```
 
 If you forget the guard, the SPA's client-side gating is the only defense — every new endpoint touching real user data should be wrapped.
 
+## Add an OAuth integration
+
+The integrations subsystem lives under `client/src/lib/integrations/` (oauth, providers, tokens, types) with a matching backend route in `server/routes/integrations.ts` and UI in `client/src/components/integrations/`. To add a new provider:
+
+1. Extend `providers.ts` with the provider's client id, scopes, auth URL, and token URL.
+2. Handle the OAuth callback in `server/routes/integrations.ts` — store tokens through the pattern in `tokens.ts`.
+3. Wire an `IntegrationCard` variant if the UX differs materially.
+
+## Build an export destination
+
+`client/src/lib/export/` contains `destinations.ts`, `types.ts`, and `workflow.ts`. A new export target is a new destination entry plus the workflow steps it needs; the UI in `client/src/components/export/ExportDialog.tsx` consumes both.
+
 ## Add a Drizzle column / table
 
 1. Edit `shared/schema.ts` — add the column to the `pgTable(...)` definition.
 2. Run `npm run db:push` against a database you control (it mutates the live DB at `DATABASE_URL`).
-3. If routes need to read or write the new column, extend `IStorage` in `server/storage.ts` and the `MemStorage` implementation.
+3. If routes need to read or write the new column, extend `IStorage` in `server/storage.ts` and the current storage implementation.
 4. If the route logic genuinely needs Postgres (not the in-memory map), either extend `MemStorage` for now or stand up a real Drizzle-backed `IStorage` implementation — the routes should keep calling `storage.foo(...)`, not import Drizzle directly.
 
 Don't drop `sessions` or `auth_users` (in `shared/models/auth.ts`) — those are mandatory for Replit Auth.
@@ -117,7 +129,7 @@ The viewport is a phone. Use `min-h-screen`, `pb-20` (clearance for `bottom-navi
 ```
 npm install
 # Provide DATABASE_URL, SESSION_SECRET, REPL_ID (and optionally ISSUER_URL)
-npm run dev   # tsx server/index.ts → API + Vite middleware on PORT (default 5000)
+npm run dev   # cross-env NODE_ENV=development tsx server/index.ts → API + Vite middleware on PORT (default 5000)
 ```
 
 Without Replit-style HTTPS, the `secure: true` session cookie won't stick. For non-Replit local dev, you'll need an HTTPS proxy or to temporarily relax the cookie config — don't commit that relaxation.

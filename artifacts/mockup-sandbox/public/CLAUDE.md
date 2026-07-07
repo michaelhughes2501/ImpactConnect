@@ -1,5 +1,5 @@
-# CLAUDE.md — server/
+# CLAUDE.md — artifacts/mockup-sandbox/public/
 
-Express bootstrap, dating-app routes, integrations subsystem, storage layer, Vite middleware, Drizzle client. `index.ts` is the entrypoint.
+Static assets served by the sandbox Vite dev server.
 
 See the repo-root `CLAUDE.md` for stack, layout, the two parallel auth/user concepts, API surface, and conventions. See `replit.md` for the product voice and prison-terminology glossary.

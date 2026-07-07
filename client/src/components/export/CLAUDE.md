@@ -1,5 +1,5 @@
-# CLAUDE.md — server/
+# CLAUDE.md — client/src/components/export/
 
-Express bootstrap, dating-app routes, integrations subsystem, storage layer, Vite middleware, Drizzle client. `index.ts` is the entrypoint.
+ExportDialog and any export-flow UI. Data model + workflow are in `client/src/lib/export/`.
 
 See the repo-root `CLAUDE.md` for stack, layout, the two parallel auth/user concepts, API surface, and conventions. See `replit.md` for the product voice and prison-terminology glossary.
