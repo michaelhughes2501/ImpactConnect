@@ -11,13 +11,17 @@ export default function Messages() {
 
   const markAllReadMutation = useMutation({
     mutationFn: async (matchIds: string[]) => {
-      await Promise.all(
+      const results = await Promise.allSettled(
         matchIds.map((matchId) =>
           apiRequest('PATCH', `/api/messages/read/${matchId}/${CURRENT_USER_ID}`)
         )
       );
+      const failed = results.filter((r) => r.status === "rejected");
+      if (failed.length > 0) {
+        throw new Error(`Failed to mark ${failed.length} match(es) as read`);
+      }
     },
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/messages/recent', CURRENT_USER_ID] });
     },
   });

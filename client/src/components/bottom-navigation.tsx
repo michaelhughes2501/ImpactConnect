@@ -1,9 +1,22 @@
+import { useQuery } from "@tanstack/react-query";
+import type { Message, Match, User } from "@shared/schema";
+import { CURRENT_USER_ID } from "@/lib/currentUser";
+
 interface BottomNavigationProps {
   activeTab: string;
   onTabChange: (tab: "discover" | "matches" | "messages" | "profile" | "resources") => void;
 }
 
 export default function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
+  const { data: recentMessages = [] } = useQuery<
+    (Message & { match: Match; otherUser: User })[]
+  >({
+    queryKey: ["/api/messages/recent", CURRENT_USER_ID],
+  });
+  const hasUnread = recentMessages.some(
+    (m) => !m.isRead && m.senderId !== CURRENT_USER_ID
+  );
+
   const tabs = [
     { id: "discover" as const, icon: "search", label: "Yard" },
     { id: "matches" as const, icon: "heart", label: "Connects" },
@@ -28,7 +41,7 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
             >
               <i className={`fas fa-${tab.icon} text-lg transition-transform ${isActive ? "scale-110" : ""}`}></i>
               <span className={`text-xs mt-1 ${isActive ? "font-medium" : ""}`}>{tab.label}</span>
-              {tab.id === "messages" && (
+              {tab.id === "messages" && hasUnread && (
                 <div className="absolute top-1 right-2 w-2 h-2 bg-primary rounded-full"></div>
               )}
             </button>
