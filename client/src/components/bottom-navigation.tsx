@@ -13,23 +13,36 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
   ];
 
   return (
-    <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-md w-full bg-white border-t border-gray-200">
-      <div className="flex justify-around py-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center py-2 px-2 relative ${
-              activeTab === tab.id ? "text-primary" : "text-gray-400 hover:text-gray-600"
-            }`}
-          >
-            <i className={`fas fa-${tab.icon} text-lg`}></i>
-            <span className="text-xs mt-1">{tab.label}</span>
-            {tab.id === "messages" && (
-              <div className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></div>
-            )}
-          </button>
-        ))}
+    <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-md w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.04)] pb-[env(safe-area-inset-bottom)]">
+      <div className="flex justify-around py-1.5">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              aria-current={isActive ? "page" : undefined}
+              className={`flex flex-col items-center justify-center gap-0.5 py-2 px-3 relative rounded-lg min-w-[56px] transition-all duration-150 ease-out active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                isActive
+                  ? "text-primary"
+                  : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <span
+                className={`absolute -top-1.5 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-primary transition-all duration-150 ${
+                  isActive ? "w-6 opacity-100" : "w-0 opacity-0"
+                }`}
+              />
+              <i className={`fas fa-${tab.icon} text-lg`}></i>
+              <span className={`text-[11px] leading-none ${isActive ? "font-semibold" : "font-medium"}`}>
+                {tab.label}
+              </span>
+              {tab.id === "messages" && (
+                <div className="absolute top-1 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-white"></div>
+              )}
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

@@ -47,7 +47,7 @@ app.use((req, res, next) => {
     log("Local development: Skipping Replit Auth and injecting mock session");
     
     app.use((req, _res, next) => {
-      req.isAuthenticated = () => true;
+      (req as any).isAuthenticated = () => true;
       (req as any).user = { id: 1, username: "local_dev_user", claims: { sub: "local-sub" } };
       next();
     });
@@ -81,7 +81,7 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '3000', 10);
+  const port = parseInt(process.env.PORT || '5000', 10);
   server.listen({
     port,
     host: "0.0.0.0",
