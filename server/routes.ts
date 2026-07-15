@@ -7,6 +7,7 @@ import { registerIntegrationsRoutes } from "./routes/integrations";
 import { z } from "zod";
 
 function sanitizeUser<T extends User>(user: T): Omit<T, "password"> {
+  if (!user) return user;
   const { password, ...rest } = user;
   return rest;
 }
@@ -78,10 +79,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let match = null;
       if (mutualLike) {
-        match = await storage.createMatch({
+        const newMatch = await storage.createMatch({
           user1Id: likeData.fromUserId,
           user2Id: likeData.toUserId
         });
+        const user1 = await storage.getUser(newMatch.user1Id);
+        const user2 = await storage.getUser(newMatch.user2Id);
+        match = {
+          ...newMatch,
+          user1: user1 ? sanitizeUser(user1) : null,
+          user2: user2 ? sanitizeUser(user2) : null,
+        };
       }
 
       res.json({ like, match });

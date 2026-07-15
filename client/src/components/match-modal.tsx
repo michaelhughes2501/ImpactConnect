@@ -1,8 +1,13 @@
 import { Link } from "wouter";
-import type { Match } from "@shared/schema";
+import type { Match, User } from "@shared/schema";
+
+export type MatchWithUsers = Match & {
+  user1: Omit<User, "password"> | null;
+  user2: Omit<User, "password"> | null;
+};
 
 interface MatchModalProps {
-  match: Match;
+  match: MatchWithUsers;
   onClose: () => void;
 }
 
@@ -23,9 +28,15 @@ export default function MatchModal({ match, onClose }: MatchModalProps) {
         </div>
 
         <div className="flex justify-center items-center space-x-3 mb-6">
-          <div className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"></div>
+          <div
+            className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"
+            style={{ backgroundImage: `url(${match.user1?.photos?.[0] || 'https://via.placeholder.com/150'})` }}
+          ></div>
           <i className="fas fa-link text-primary text-sm"></i>
-          <div className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"></div>
+          <div
+            className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"
+            style={{ backgroundImage: `url(${match.user2?.photos?.[0] || 'https://via.placeholder.com/150'})` }}
+          ></div>
         </div>
 
         <div className="space-y-3">

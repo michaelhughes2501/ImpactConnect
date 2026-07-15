@@ -3,12 +3,12 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import ProfileCard from "../components/profile-card";
 import SafetyBanner from "../components/safety-banner";
-import MatchModal from "../components/match-modal";
-import type { User, Match } from "@shared/schema";
+import MatchModal, { type MatchWithUsers } from "../components/match-modal";
+import type { User } from "@shared/schema";
 import { CURRENT_USER_ID } from "@/lib/currentUser";
 
 export default function Discover() {
-  const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
+  const [currentMatch, setCurrentMatch] = useState<MatchWithUsers | null>(null);
 
   const { data: discoveryUsers = [], isLoading } = useQuery<User[]>({
     queryKey: ['/api/discover', CURRENT_USER_ID],
