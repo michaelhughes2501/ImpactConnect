@@ -1,38 +1,56 @@
 import { Link } from "wouter";
-import type { Match } from "@shared/schema";
+import type { Match, User } from "@shared/schema";
+
+export type MatchWithUsers = Match & {
+  user1: Omit<User, "password"> | null;
+  user2: Omit<User, "password"> | null;
+};
 
 interface MatchModalProps {
-  match: Match;
+  match: MatchWithUsers;
   onClose: () => void;
 }
 
 export default function MatchModal({ match, onClose }: MatchModalProps) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 mx-4 max-w-sm w-full text-center">
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl p-6 mx-auto max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95 fade-in duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-4">
-          <i className="fas fa-heart text-primary text-4xl mb-3"></i>
-          <h3 className="font-semibold text-dark text-lg mb-2">You Connected!</h3>
+          <i className="fas fa-heart text-primary text-4xl mb-3 animate-pulse"></i>
+          <h3 className="font-semibold text-dark text-xl mb-2">You Connected!</h3>
           <p className="text-gray-600 text-sm">You both showed interest - that's solid</p>
         </div>
-        
-        <div className="flex justify-center space-x-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center"></div>
-          <div className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center"></div>
+
+        <div className="flex justify-center items-center space-x-3 mb-6">
+          <div
+            className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"
+            style={{ backgroundImage: `url(${match.user1?.photos?.[0] || 'https://via.placeholder.com/150'})` }}
+          ></div>
+          <i className="fas fa-link text-primary text-sm"></i>
+          <div
+            className="w-16 h-16 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white shadow-md"
+            style={{ backgroundImage: `url(${match.user2?.photos?.[0] || 'https://via.placeholder.com/150'})` }}
+          ></div>
         </div>
 
         <div className="space-y-3">
           <Link href={`/chat/${match.id}`}>
-            <button 
+            <button
               onClick={onClose}
-              className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             >
               Send a Kite
             </button>
           </Link>
-          <button 
+          <button
             onClick={onClose}
-            className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
           >
             Keep Looking
           </button>

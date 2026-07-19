@@ -1,10 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertLikeSchema, insertMessageSchema } from "@shared/schema";
+import { insertUserSchema, insertLikeSchema, insertMessageSchema, type User } from "@shared/schema";
 import { registerAuthRoutes } from "./replit_integrations/auth";
 import { registerIntegrationsRoutes } from "./routes/integrations";
 import { z } from "zod";
+
+function sanitizeUser<T extends User>(user: T): Omit<T, "password"> {
+  if (!user) return user;
+  const { password, ...rest } = user;
+  return rest;
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   registerAuthRoutes(app);
@@ -49,7 +55,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const users = await storage.getUsersForDiscovery(userId);
-      res.json(users);
+      res.json(users.map(sanitizeUser));
     } catch (error) {
       res.status(500).json({ message: "Failed to get discovery users", error });
     }
@@ -73,10 +79,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let match = null;
       if (mutualLike) {
-        match = await storage.createMatch({
+        const newMatch = await storage.createMatch({
           user1Id: likeData.fromUserId,
           user2Id: likeData.toUserId
         });
+        const user1 = await storage.getUser(newMatch.user1Id);
+        const user2 = await storage.getUser(newMatch.user2Id);
+        match = {
+          ...newMatch,
+          user1: user1 ? sanitizeUser(user1) : null,
+          user2: user2 ? sanitizeUser(user2) : null,
+        };
       }
 
       res.json({ like, match });
@@ -90,7 +103,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const matches = await storage.getUserMatches(userId);
-      res.json(matches);
+      res.json(matches.map((match) => ({ ...match, otherUser: sanitizeUser(match.otherUser) })));
     } catch (error) {
       res.status(500).json({ message: "Failed to get matches", error });
     }
@@ -106,8 +119,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user2 = await storage.getUser(match.user2Id);
       res.json({
         ...match,
-        user1: user1 ? { ...user1, password: undefined } : null,
-        user2: user2 ? { ...user2, password: undefined } : null,
+        user1: user1 ? sanitizeUser(user1) : null,
+        user2: user2 ? sanitizeUser(user2) : null,
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to get match", error });
@@ -139,7 +152,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const messages = await storage.getRecentMessages(userId);
-      res.json(messages);
+      res.json(messages.map((message) => ({ ...message, otherUser: sanitizeUser(message.otherUser) })));
     } catch (error) {
       res.status(500).json({ message: "Failed to get recent messages", error });
     }
