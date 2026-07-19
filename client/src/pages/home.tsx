@@ -48,7 +48,7 @@ export default function Home({ initialTab = "discover" }: HomeProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-3 px-1 border-b-2 font-medium text-sm flex items-center flex-shrink-0 ${
+              className={`py-3 px-1 border-b-2 font-medium text-sm flex items-center flex-shrink-0 transition-colors ${
                 activeTab === tab.id
                   ? "border-primary text-primary"
                   : "border-transparent text-gray-500 hover:text-gray-700"
