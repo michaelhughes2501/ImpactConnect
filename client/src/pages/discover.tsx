@@ -6,9 +6,11 @@ import SafetyBanner from "../components/safety-banner";
 import MatchModal, { type MatchWithUsers } from "../components/match-modal";
 import type { User } from "@shared/schema";
 import { CURRENT_USER_ID } from "@/lib/currentUser";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Discover() {
   const [currentMatch, setCurrentMatch] = useState<MatchWithUsers | null>(null);
+  const { toast } = useToast();
 
   const { data: discoveryUsers = [], isLoading } = useQuery<User[]>({
     queryKey: ['/api/discover', CURRENT_USER_ID],
@@ -62,7 +64,12 @@ export default function Discover() {
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-dark">Free World Connections</h2>
-          <button className="flex items-center space-x-2 text-primary text-sm font-medium">
+          <button
+            onClick={() =>
+              toast({ title: "Coming soon", description: "Discovery filters aren't wired up yet." })
+            }
+            className="flex items-center space-x-2 text-primary text-sm font-medium"
+          >
             <i className="fas fa-sliders-h"></i>
             <span>Set My Game</span>
           </button>

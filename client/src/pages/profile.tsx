@@ -1,8 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import type { User, Profile } from "@shared/schema";
 import { CURRENT_USER_ID } from "@/lib/currentUser";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+const HOUSE_RULES = [
+  "Everyone on the Yard passes a background check before their profile goes live.",
+  "Never share your SSN, financial info, or exact address in a Kite.",
+  "Meet new Connects in public spots for the first few times.",
+  "Tell a friend or family member where you're going and who with.",
+  "Report anything that feels off — we look into every report.",
+];
 
 export default function Profile() {
+  const { toast } = useToast();
+
   const { data: user, isLoading: userLoading } = useQuery<User>({
     queryKey: ['/api/users', CURRENT_USER_ID],
   });
@@ -10,6 +29,9 @@ export default function Profile() {
   const { data: profile, isLoading: profileLoading } = useQuery<Profile>({
     queryKey: ['/api/profiles', CURRENT_USER_ID],
   });
+
+  const notImplemented = (feature: string) =>
+    toast({ title: "Coming soon", description: `${feature} isn't wired up yet.` });
 
   if (userLoading || profileLoading) {
     return (
@@ -76,10 +98,16 @@ export default function Profile() {
       </div>
 
       <div className="space-y-3 mb-6">
-        <button className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        <button
+          onClick={() => notImplemented("Editing your info")}
+          className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+        >
           <i className="fas fa-edit mr-2"></i>Update My Info
         </button>
-        <button className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+        <button
+          onClick={() => notImplemented("Boosted visibility")}
+          className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+        >
           <i className="fas fa-rocket mr-2"></i>Get More Visibility
         </button>
       </div>
@@ -93,8 +121,12 @@ export default function Profile() {
           { icon: "bell", text: "Alerts" },
           { icon: "cog", text: "My Settings" },
           { icon: "question-circle", text: "Need Help" },
-        ].map((item, index) => (
-          <button key={index} className="w-full flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+        ].map((item) => (
+          <button
+            key={item.text}
+            onClick={() => notImplemented(item.text)}
+            className="w-full flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
             <div className="flex items-center space-x-3">
               <i className={`fas fa-${item.icon} text-gray-600`}></i>
               <span className="text-gray-700 font-medium">{item.text}</span>
@@ -109,9 +141,29 @@ export default function Profile() {
         <p className="text-gray-600 text-xs mb-3">
           Keeping it real and respectful for everyone trying to build something out here.
         </p>
-        <button className="text-primary text-sm font-medium hover:underline">
-          Check the Rules →
-        </button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button className="text-primary text-sm font-medium hover:underline">
+              Check the Rules →
+            </button>
+          </DialogTrigger>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Yard Rules</DialogTitle>
+              <DialogDescription>
+                A few things every Connect on the Yard agrees to.
+              </DialogDescription>
+            </DialogHeader>
+            <ul className="space-y-2 text-sm text-gray-700">
+              {HOUSE_RULES.map((rule) => (
+                <li key={rule} className="flex items-start space-x-2">
+                  <i className="fas fa-check text-success text-xs mt-1"></i>
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
   );
