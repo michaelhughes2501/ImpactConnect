@@ -65,51 +65,55 @@
 }
 
 @layer utilities {
+  /* --primary/--secondary/--success/--warning/--dark are already full hsl(...)
+     strings (see :root / .dark above), so these must reference the variables
+     directly — wrapping them in hsl(...) again produces an invalid nested
+     value (e.g. hsl(hsl(24, 80%, 52%))) that browsers silently drop. */
   .text-primary {
-    color: hsl(var(--primary));
+    color: var(--primary);
   }
-  
+
   .text-secondary {
-    color: hsl(var(--secondary));
+    color: var(--secondary);
   }
-  
+
   .text-success {
-    color: hsl(var(--success));
+    color: var(--success);
   }
-  
+
   .text-warning {
-    color: hsl(var(--warning));
+    color: var(--warning);
   }
-  
+
   .text-dark {
-    color: hsl(var(--dark));
+    color: var(--dark);
   }
-  
+
   .bg-primary {
-    background-color: hsl(var(--primary));
+    background-color: var(--primary);
   }
-  
+
   .bg-secondary {
-    background-color: hsl(var(--secondary));
+    background-color: var(--secondary);
   }
-  
+
   .bg-success {
-    background-color: hsl(var(--success));
+    background-color: var(--success);
   }
-  
+
   .bg-warning {
-    background-color: hsl(var(--warning));
+    background-color: var(--warning);
   }
-  
+
   .bg-dark {
-    background-color: hsl(var(--dark));
+    background-color: var(--dark);
   }
-  
+
   .border-primary {
-    border-color: hsl(var(--primary));
+    border-color: var(--primary);
   }
-  
+
   .border-secondary {
-    border-color: hsl(var(--secondary));
+    border-color: var(--secondary);
   }
 }

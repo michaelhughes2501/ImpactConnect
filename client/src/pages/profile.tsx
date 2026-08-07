@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import type { User, Profile } from "@shared/schema";
 import { CURRENT_USER_ID } from "@/lib/currentUser";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Profile() {
+  const { logout, isLoggingOut } = useAuth();
+
   const { data: user, isLoading: userLoading } = useQuery<User>({
     queryKey: ['/api/users', CURRENT_USER_ID],
   });
@@ -102,6 +105,20 @@ export default function Profile() {
             <i className="fas fa-chevron-right text-gray-400"></i>
           </button>
         ))}
+
+        <button
+          onClick={() => logout()}
+          disabled={isLoggingOut}
+          className="w-full flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+        >
+          <div className="flex items-center space-x-3">
+            <i className="fas fa-sign-out-alt text-gray-600"></i>
+            <span className="text-gray-700 font-medium">
+              {isLoggingOut ? "Logging Out…" : "Log Out"}
+            </span>
+          </div>
+          <i className="fas fa-chevron-right text-gray-400"></i>
+        </button>
       </div>
 
       <div className="mt-6 p-4 bg-primary/10 border border-primary/20 rounded-lg">
