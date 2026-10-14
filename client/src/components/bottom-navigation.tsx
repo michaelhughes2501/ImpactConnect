@@ -46,7 +46,9 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
                   isActive ? "w-6 opacity-100" : "w-0 opacity-0"
                 }`}
               />
-              <i className={`fas fa-${tab.icon} text-lg transition-transform ${isActive ? "scale-110" : ""}`}></i>
+              <i
+                className={`fas fa-${tab.icon} text-lg transition-transform ${isActive ? "scale-110" : ""}`}
+              ></i>
               <span className={`text-[11px] leading-none ${isActive ? "font-semibold" : "font-medium"}`}>
                 {tab.label}
               </span>
